@@ -5,12 +5,39 @@
         </style>
     </head>
     <body>
-        <input type="text" id="message" />
-        <button onclick="transmitMessage()">Send</button>
-        <div id="msgs">
 
+        <center>
+            <div id="login">
+                <input type="text" id="username" placeholder="user name" />
+                <button onclick="login()">login</button>
+            </div>
+        </center>
+
+
+        <div id="chat">
+            <input type="text" id="message" />
+            <button onclick="transmitMessage()">Send</button>
+            <div id="msgs">
+            </div>
         </div>
+
+        
         <script>
+
+            var chat = document.getElementById('chat');
+            chat.style.display = "none";
+
+
+            function login(){
+                var username = document.getElementById('username').value;
+                localStorage.setItem('username', username);
+                chat.style.display = "block";
+
+                var login = document.getElementById('login');
+                login.style.display = "none";
+
+            }
+
             // Create a new WebSocket.
             // var socket  = new WebSocket('ws://localhost:8080');
             var socket  = new WebSocket('ws://localhost:8080');
@@ -21,21 +48,26 @@
             var message = document.getElementById('message');
 
             function transmitMessage() {
-                socket.send( message.value );
+                var message_text = {
+                    'msg'  : message.value ,
+                    'user' : localStorage.getItem('username')
+                };
+                socket.send( JSON.stringify(message_text) );
                 message.value = "";
             }
 
             socket.onmessage = function(e) {
-                // console.log(e.data)
                 generate_msg(e.data)
                 // alert( e.data );
             }
 
             function generate_msg(data){
                 var data = JSON.parse(data);
+                console.log(data);
+                var message = JSON.parse(data.msg);
                 var div = document.getElementById('msgs');
                 
-                var md = `<h3>${data.from} : ${data.msg}</h3>`;
+                var md = `<h3>${message.user} : ${message.msg}</h3>`;
 
                 div.innerHTML += md;
             }

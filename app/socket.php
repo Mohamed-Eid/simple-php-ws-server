@@ -16,7 +16,7 @@ class Socket implements MessageComponentInterface {
 
         // Store the new connection in $this->clients
         $this->clients->attach($conn);
-
+        // var_dump($conn);
         echo "New connection! ({$conn->resourceId})\n";
     }
 
@@ -26,6 +26,7 @@ class Socket implements MessageComponentInterface {
             'from' => $from->resourceId,
             'msg' => $msg,
         ];
+        print_r($data['msg']);
 
         foreach ( $this->clients as $client ) {
 
