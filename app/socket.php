@@ -29,9 +29,9 @@ class Socket implements MessageComponentInterface {
 
         foreach ( $this->clients as $client ) {
 
-            if ( $from->resourceId == $client->resourceId ) {
-                continue;
-            }
+            // if ( $from->resourceId == $client->resourceId ) {
+            //     continue;
+            // }
 
             // $client->send( "Client $from->resourceId said $msg" );
             $client->send( json_encode($data));

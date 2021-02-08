@@ -7,6 +7,9 @@
     <body>
         <input type="text" id="message" />
         <button onclick="transmitMessage()">Send</button>
+        <div id="msgs">
+
+        </div>
         <script>
             // Create a new WebSocket.
             // var socket  = new WebSocket('ws://localhost:8080');
@@ -19,11 +22,22 @@
 
             function transmitMessage() {
                 socket.send( message.value );
+                message.value = "";
             }
 
             socket.onmessage = function(e) {
-                console.log(e)
+                // console.log(e.data)
+                generate_msg(e.data)
                 // alert( e.data );
+            }
+
+            function generate_msg(data){
+                var data = JSON.parse(data);
+                var div = document.getElementById('msgs');
+                
+                var md = `<h3>${data.from} : ${data.msg}</h3>`;
+
+                div.innerHTML += md;
             }
         </script>
     </body>
